@@ -1,5 +1,14 @@
 import "../styles/global.css";
+import "react-toastify/dist/ReactToastify.css";
 
-const App = ({ Component, pageProps }) => <Component {...pageProps} />;
+import { ToastContainer } from "react-toastify";
+
+const App = ({ Component, pageProps }) => (
+  <>
+    <Component {...pageProps} />
+
+    <ToastContainer />
+  </>
+);
 
 export default App;

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Upload = () => {
   const [parseData, setParseData] = useState();
@@ -11,6 +12,7 @@ const Upload = () => {
     phone: "",
     address: "",
     skills: [],
+    education: [],
   });
 
   const handleFileInput = async (event) => {
@@ -37,20 +39,32 @@ const Upload = () => {
       setParseData(res.data.data);
       setData((data) => ({
         ...data,
-        name: res.data.name,
-        email: res.data.email,
-        phone: res.data.phone,
-        skills: res.data.skills,
-        address: res.data.address,
+        name: res?.data?.name,
+        email: res?.data?.email,
+        phone: res?.data?.phone,
+        skills: res?.data?.skills ?? [],
+        address: res?.data?.address,
+        education: res?.data?.education,
       }));
       setParseLoading(false);
     } catch (error) {
+      toast.error(error?.response?.data?.error ?? "Something went wrong!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
       setParseLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center w-full py-8 bg-grey-lighter flex-col">
+    <div className="flex flex-col items-center justify-center w-full py-8 bg-grey-lighter">
       <div className="container flex flex-col items-center justify-center px-4">
         <label className="flex flex-col items-center w-64 px-4 py-6 tracking-wide uppercase bg-white border rounded-lg shadow-lg cursor-pointer text-blue border-blue">
           <svg
@@ -67,7 +81,7 @@ const Upload = () => {
           )}
 
           {!parseLoading && (
-            <span className="mt-2 text-base leading-normal font-medium">
+            <span className="mt-2 text-base font-medium leading-normal">
               Select a resume
             </span>
           )}
@@ -80,45 +94,56 @@ const Upload = () => {
           value={parseData}
         />
 
-        <div className="w-full p-4 bg-gray-300 mt-8 flex flex-col justify-center items-center">
-          <div className="font-bold mb-4 text-xl">Overview</div>
+        <div className="flex flex-col items-center justify-center w-full p-4 mt-8 bg-gray-300">
+          <div className="mb-4 text-xl font-bold">Overview</div>
 
-          <div className="w-full grid grid-cols-5 border border-gray-50">
-            <div className="col-span-1 font-bold bg-gray-200 py-2 px-4">
+          <div className="grid w-full grid-cols-5 border border-gray-50">
+            <div className="col-span-1 px-4 py-2 font-bold bg-gray-200">
               Name:
             </div>
-            <div className="col-span-4 py-2 px-4 bg-gray-400">{data.name}</div>
+            <div className="col-span-4 px-4 py-2 bg-gray-400">{data.name}</div>
           </div>
 
-          <div className="w-full grid grid-cols-5 border border-gray-50">
-            <div className="col-span-1 font-bold bg-gray-200 py-2 px-4">
+          <div className="grid w-full grid-cols-5 border border-gray-50">
+            <div className="col-span-1 px-4 py-2 font-bold bg-gray-200">
               Email:
             </div>
-            <div className="col-span-4 py-2 px-4 bg-gray-400">{data.email}</div>
+            <div className="col-span-4 px-4 py-2 bg-gray-400">{data.email}</div>
           </div>
 
-          <div className="w-full grid grid-cols-5 border border-gray-50">
-            <div className="col-span-1 font-bold bg-gray-200 py-2 px-4">
+          <div className="grid w-full grid-cols-5 border border-gray-50">
+            <div className="col-span-1 px-4 py-2 font-bold bg-gray-200">
               Phone:
             </div>
-            <div className="col-span-4 py-2 px-4 bg-gray-400">{data.phone}</div>
+            <div className="col-span-4 px-4 py-2 bg-gray-400">{data.phone}</div>
           </div>
 
-          <div className="w-full grid grid-cols-5 border border-gray-50">
-            <div className="col-span-1 font-bold bg-gray-200 py-2 px-4">
+          <div className="grid w-full grid-cols-5 border border-gray-50">
+            <div className="col-span-1 px-4 py-2 font-bold bg-gray-200">
               Address:
             </div>
-            <div className="col-span-4 py-2 px-4 bg-gray-400">{data.address}</div>
+            <div className="col-span-4 px-4 py-2 bg-gray-400">
+              {data.address}
+            </div>
           </div>
 
-          <div className="w-full grid grid-cols-5 border border-gray-50">
-            <div className="col-span-1 font-bold bg-gray-200 py-2 px-4">
+          <div className="grid w-full grid-cols-5 border border-gray-50">
+            <div className="col-span-1 px-4 py-2 font-bold bg-gray-200">
               Skills:
             </div>
-            <div className="col-span-4 py-2 px-4 bg-gray-400">
+            <div className="col-span-4 px-4 py-2 bg-gray-400">
               {data.skills.join(", ")}
             </div>
           </div>
+
+          {/* <div className="grid w-full grid-cols-5 border border-gray-50">
+            <div className="col-span-1 px-4 py-2 font-bold bg-gray-200">
+              Education:
+            </div>
+            <div className="col-span-4 px-4 py-2 bg-gray-400">
+              {data.skills.join(", ")}
+            </div>
+          </div> */}
         </div>
       </div>
     </div>
